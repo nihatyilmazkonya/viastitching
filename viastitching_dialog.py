@@ -249,13 +249,13 @@ class ViaStitchingDialog(viastitching_gui):
             bool: True if p1 position comply with clearance value False otherwise.
 
         """
-        p1 = via.GetPosition()
+        p1 = pcbnew.VECTOR2I(via.GetPosition())
         corners = area.GetNumCorners()
         # Calculate minimum distance from corners
         # TODO: remove?
         for i in range(corners):
             corner = area.GetCornerPosition(i)
-            p2 = corner.getWxPoint()
+            p2 = pcbnew.VECTOR2I(corner.getWxPoint())
             the_distance = norm(p2 - p1)  # sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
 
             if the_distance < clearance:
@@ -360,10 +360,10 @@ class ViaStitchingDialog(viastitching_gui):
                     yp = y
 
                 if hasattr(pcbnew, 'VECTOR2I'):
-                    p = pcbnew.VECTOR2I(xp, yp)
+                    p = pcbnew.VECTOR2I(pcbnew.wxPoint(xp, yp))
                 else:
-                    if(hasattr(pcbnew, 'wxPoint')):
-                        p = pcbnew.wxPoint(xp, yp)
+                   if(hasattr(pcbnew, 'wxPoint')):
+                        p = pcbnew.wxPoint(pcbnew.wxPoint(xp, yp))
 
                 if self.area.HitTestFilledArea(layer, p, 0):
                     via = pcbnew.PCB_VIA(self.board)
